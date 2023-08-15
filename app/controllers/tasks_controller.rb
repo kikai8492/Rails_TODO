@@ -47,6 +47,6 @@ class TasksController < ApplicationController
   private
 
   def task_params
-    params.require(:task).permit(:not_started_yet, :start, :completion, :expiry_date)
+    params.require(:task).permit(:not_started_yet, :content)
   end
 end

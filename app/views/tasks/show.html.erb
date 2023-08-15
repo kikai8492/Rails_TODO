@@ -1,0 +1,8 @@
+<div class="container">
+  <h2>内容</h2>
+  <p class="content"><%= @task.not_started_yet%></p>
+  <h2>詳細</h2>
+  <p class="content"><%= @task.content%><p>
+
+  <%= link_to "戻る", tasks_path %>
+</div>
