@@ -1,0 +1,9 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  not_started_yet: MyString
+  content: MyString
+
+two:
+  not_started_yet: MyString
+  content: MyString

@@ -1,0 +1,17 @@
+<%= form_with(model: @task, local: true) do |f| %>
+  <% if @task.errors.any? %>
+    <h2><%= pluralize(@task.errors.count, "error") %>件のエラーがあります。</h2>
+
+    <ul>
+      <% @task.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  <% end %>
+  <%= f.label "タスク名" %>
+  <%= f.text_field :not_started_yet,id: 'text' %>
+  <%= f.label "詳細" %>
+  <%= f.text_field :content, id:'content' %>
+
+  <%= f.submit "タスクを追加する"%>
+<% end %>

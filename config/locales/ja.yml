@@ -1,0 +1,7 @@
+ja:
+  activerecord:
+    models:
+      task: タスク
+      task:
+        not_started_yet: タスク
+        content: 詳細
