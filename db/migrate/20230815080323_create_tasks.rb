@@ -5,6 +5,7 @@ class CreateTasks < ActiveRecord::Migration[6.1]
       t.string :content
 
       t.timestamps
+      add_index :tasks, :created_at
     end
   end
 end

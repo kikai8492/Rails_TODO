@@ -47,8 +47,8 @@ RSpec.describe 'タスク管理機能', type: :system do
      end
   end
   context 'タスクが作成日時の降順に並んでいる場合' do
-    let!(:task1) { Task.create(not_started_yet: "name1", content: "content1") }
-    let!(:task2) { Task.create(not_started_yet: "name2", content: "content2") }
+    let!(:task1) { Task.create(not_started_yet: "task1", content: "content1") }
+    let!(:task2) { Task.create(not_started_yet: "task2", content: "content2") }
     it '新しいタスクが一番上に表示される' do
       visit tasks_path
       expect(page.text).to match(/#{task1.not_started_yet}[\s\S]*#{task2.not_started_yet}/)
