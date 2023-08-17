@@ -3,8 +3,10 @@ class TasksController < ApplicationController
     @tasks = Task.all.order(created_at: :desc)
     if params[:sort_expired].present?
       @tasks = Task.all.order(expired_at: :asc)
-    else
-      @tasks = Task.all
+    end
+
+    if params[:not_started_yet].present?
+      @tasks = Task.where('not_started_yet LIKE(?)', "%#{params[:not_started_yet]}%")
     end
   end
 
@@ -38,6 +40,7 @@ class TasksController < ApplicationController
   def show
     @task = Task.find(params[:id])
   end
+
 
 
   def destroy

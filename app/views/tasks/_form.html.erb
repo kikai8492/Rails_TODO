@@ -15,7 +15,7 @@
   <%= f.label "終了期限" %>
   <%= f.date_field :expired_at, id:'expired_at' %>
   <%= f.label "ステータス"%>
-  <%= f.select :status, [["未着手","未着手"],["着手中","着手中"],["完了","完了"]],include_blank: "選択して下さい" %>
+  <%= f.select :status, [["未着手"],["着手中"],["完了"]],include_blank: "選択して下さい" %>
 
   <%= f.submit "タスクを追加する"%>
 <% end %>
