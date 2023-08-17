@@ -2,32 +2,23 @@
 <h1 class="title">To-Doリスト</h1>
 <%= link_to 'タスクを追加する', new_task_path%>
 <table class="table">
+<% @tasks.each do |t| %>
   <tr>
-    <th>
-      優先順位
-      <div class="vertical">
-        <span>1</span>
-        <span>2</span>
-        <span>3</span>
-        <span>4</span>
-        <span>5</span>
-        <span>6</span>
-        <span>7</span>
-        <span>8</span>
-        <span>9</span>
-        <span>10</span>
-      </div>
-    </th>
-    <th>
-    </th>
+    <th>タスク名
+    タスクの詳細
+    終了期限
+    登録日時
+    ステータス
+    優先度</th>
   </tr>
   <tr>
-    <td>
-      未着手
-      <% @tasks.each do |t| %>
+    <td>      
         <% if t.not_started_yet %>
           <tr>
             <td><%= t.not_started_yet %></td>
+            <td><%= t.expired_at%></td>
+            <td><%= t.created_at%></td>
+            <td><%= t.status%></td>
             <td>
               <%= link_to '詳細', task_path(t.id) %>
               <%= link_to '編集', edit_task_path(t.id) %>
@@ -38,12 +29,9 @@
       <% end %>
     </td>
     <td>
-      着手
-      
-      完了
-      
+
     </td>
-    <%= link_to "終了期限でソートする", tasks_path(expiry_date: "true")%>
+    <%= link_to "終了期限でソートする", tasks_path(sort_expired: "true")%>
   </tr>
 </table>
 

@@ -11,6 +11,7 @@ RSpec.describe 'タスク管理機能', type: :system do
       # ここに「タスク名」というラベル名の入力欄に内容をfill_in（入力）する処理を書く
       fill_in 'text', with: 'task'
       fill_in 'content', with: 'task'
+      fill_in 'expired_at', with: '002023-08-18'
       #textはタスク名のtext_fieldのid
       # ここに「タスク詳細」というラベル名の入力欄に内容をfill_in（入力）する処理を書く
       # 3. 「登録する」というvalue（表記文字）のあるボタンをクリックする
@@ -27,12 +28,14 @@ RSpec.describe 'タスク管理機能', type: :system do
     context '一覧画面に遷移した場合' do
       it '作成済みのタスク一覧が表示される' do
         # テストで使用するためのタスクを作成
-        FactoryBot.create(:task, not_started_yet: 'task')
+        FactoryBot.create(:task, not_started_yet: 'task1', expired_at: '002023-08-18')
+        FactoryBot.create(:task, not_started_yet: 'task2', expired_at: '002023-08-19')
         # タスク一覧ページに遷移
         visit tasks_path
         # visitした（遷移した）page（タスク一覧ページ）に「task」という文字列が
         # have_contentされているか（含まれているか）ということをexpectする（確認・期待する）
-        expect(page).to have_content 'task'
+        expect(page).to have_content 'task1'
+        expect(page).to have_content 'task2'
         # expectの結果が true ならテスト成功、false なら失敗として結果が出力される
       end
     end
@@ -46,11 +49,12 @@ RSpec.describe 'タスク管理機能', type: :system do
       end
     end
   end
-  context 'タスクが作成日時の降順に並んでいる場合' do
-    let!(:task1) { Task.create(not_started_yet: "task1", content: "content1") }
-    let!(:task2) { Task.create(not_started_yet: "task2", content: "content2") }
-    it '新しいタスクが一番上に表示される' do
+  context '終了期限でソートするを押した場合' do
+    let!(:task1) { Task.create(not_started_yet: "task1", content: "content1", expired_at: '002023-08-19') }
+    let!(:task2) { Task.create(not_started_yet: "task2", content: "content2", expired_at: '002023-08-18') }
+    it '終了期限が一番近いタスクが一番上に表示される' do
       visit tasks_path
+      click_on '終了期限でソートする'
       expect(page.text).to match(/#{task2.not_started_yet}[\s\S]*#{task1.not_started_yet}/)
     end
   end
