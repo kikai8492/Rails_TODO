@@ -38,12 +38,20 @@ RSpec.describe 'タスク管理機能', type: :system do
     end
   end
   describe '詳細表示機能' do
-     context '任意のタスク詳細画面に遷移した場合' do
-       it '該当タスクの内容が表示される' do
-        task = FactoryBot.create(:task, not_started_yet: 'task')
-        visit task_path(task)
-        expect(page).to have_content 'task'
-       end
-     end
+    context '任意のタスク詳細画面に遷移した場合' do
+      it '該当タスクの内容が表示される' do
+      task = FactoryBot.create(:task, not_started_yet: 'task')
+      visit task_path(task)
+      expect(page).to have_content 'task'
+      end
+    end
+  end
+  context 'タスクが作成日時の降順に並んでいる場合' do
+    let!(:task1) { Task.create(not_started_yet: "task1", content: "content1") }
+    let!(:task2) { Task.create(not_started_yet: "task2", content: "content2") }
+    it '新しいタスクが一番上に表示される' do
+      visit tasks_path
+      expect(page.text).to match(/#{task2.not_started_yet}[\s\S]*#{task1.not_started_yet}/)
+    end
   end
 end

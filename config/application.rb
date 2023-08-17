@@ -21,6 +21,7 @@ module Manyou
   end
 end
 
+#タイムゾーンを日本時間に設定
 class Application < Rails::Application
   config.time_zone = 'Tokyo'
 end
