@@ -13,12 +13,11 @@
   <tr>
     <td>      
       <% @tasks.each do |t| %>
-        <% if t.not_started_yet %>
           <tr>
             <td><%= t.not_started_yet %></td>
             <td><%= t.content%></td>
             <td><%= t.expired_at%></td>
-            <td><%= t.created_at%></td>
+            <td><%= t.created_at.strftime('%Y/%m/%d')%></td>
             <td><%= t.status%></td>
             <td>
               <%= link_to '詳細', task_path(t.id) %>
@@ -26,7 +25,6 @@
               <%= link_to '削除', task_path(t.id), method: :delete, data: { confirm: '削除しますか？' } %>
             </td>
           </tr>
-        <% end %>
       <% end %>
     </td>
     <td>
@@ -35,9 +33,9 @@
     <%# <%= link_to "終了期限でソートする", tasks_path(sort_expired: "true")%> 
     <%= form_with(url: tasks_path, local: true, method: :get) do |f|%>
       <%= f.search_field :not_started_yet, placeholder: "検索する", id: 'search' %>
-      <%= f.submit "検索する" %>
       <%= f.select :status, [["未着手"],["着手中"],["完了"]],include_blank: "選択して下さい"%>
-    <% end %>  
+      <%= f.submit "検索する" %>
+    <% end %>
 
   </tr>
 </table>

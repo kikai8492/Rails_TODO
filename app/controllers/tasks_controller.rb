@@ -2,12 +2,19 @@ class TasksController < ApplicationController
   def index
     @tasks = Task.all.order(created_at: :desc)
     if params[:sort_expired].present?
-      @tasks = Task.all.order(expired_at: :asc)
+      @tasks = Task.sort_expired
     end
 
-    if params[:not_started_yet].present?
-      @tasks = Task.where('not_started_yet LIKE(?)', "%#{params[:not_started_yet]}%")
+    if params[:not_started_yet].present? && params[:status].present?
+      @tasks = Task.not_started_yet_and_status(params[:not_started_yet], params[:status])
+    elsif params[:not_started_yet].present?
+      @tasks = Task.not_started_yet(params[:not_started_yet])
+    elsif params[:status].present?
+      @tasks = Task.status(params[:status])
+    else
+      #ここの処理は3行目の処理と同じなので省略した
     end
+    
   end
 
   def new
