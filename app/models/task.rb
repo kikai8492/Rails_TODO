@@ -20,4 +20,6 @@ class Task < ApplicationRecord
   scope :sort_priority, -> { #優先順位で並び替える
     order(priority: :desc)
   }
+
+  paginates_per 5 #1ページあたり5項目表示
 end

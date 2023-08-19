@@ -3,19 +3,19 @@ class TasksController < ApplicationController
   def index
     @tasks = Task.all.order(created_at: :desc).page(params[:page])
     if params[:sort_expired].present?#終了期限で並び替える時の処理
-      @tasks = Task.sort_expired
+      @tasks = Task.sort_expired.page(params[:page])
     end
 
     if params[:sort_priority].present?#優先順位で並び替える時の処理
-      @tasks = Task.sort_priority
+      @tasks = Task.sort_priority.page(params[:page])
     end
 
     if params[:not_started_yet].present? && params[:status].present?
-      @tasks = Task.not_started_yet_and_status(params[:not_started_yet], params[:status])
+      @tasks = Task.not_started_yet_and_status(params[:not_started_yet], params[:status]).page(params[:page])
     elsif params[:not_started_yet].present?
-      @tasks = Task.not_started_yet(params[:not_started_yet])
+      @tasks = Task.not_started_yet(params[:not_started_yet]).page(params[:page])
     elsif params[:status].present?
-      @tasks = Task.status(params[:status])
+      @tasks = Task.status(params[:status]).page(params[:page])
     else
       #ここの処理は3行目の処理と同じなので省略した
     end
