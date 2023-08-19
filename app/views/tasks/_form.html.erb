@@ -16,6 +16,8 @@
   <%= f.date_field :expired_at, id:'expired_at' %>
   <%= f.label "ステータス"%>
   <%= f.select :status, [["未着手"],["着手中"],["完了"]],include_blank: "選択して下さい", id:'select_status' %>
+  <%= f.label "優先度"%>
+  <%= f.select :priority, Task.priorities.keys.map { |f| [t("enum.task.priority.#{f}"), f] }, { include_blank: "選択してください" } %>
 
   <%= f.submit "タスクを追加する"%>
 <% end %>

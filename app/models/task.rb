@@ -15,4 +15,9 @@ class Task < ApplicationRecord
   scope :status, -> (status) { #ステータスで検索する時のスコープ
     where('status LIKE ?', "%#{status}%")
   }
+
+  enum priority: {低: 0, 中: 1, 高: 2} #優先順位のenum
+  scope :sort_priority, -> { #優先順位で並び替える
+    order(priority: :desc)
+  }
 end

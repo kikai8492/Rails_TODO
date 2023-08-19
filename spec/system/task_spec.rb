@@ -108,5 +108,14 @@ RSpec.describe 'タスク管理機能', type: :system do
         expect(page.text).to match(/#{task2.not_started_yet}[\s\S]*#{task1.not_started_yet}/)
       end
     end
+    context '優先度でソートするを押した場合' do
+      let!(:task1) { Task.create(not_started_yet: "task1", content: "content1", expired_at: '002023-08-19', priority: '高') }
+      let!(:task2) { Task.create(not_started_yet: "task2", content: "content2", expired_at: '002023-08-18', priority: '低') }
+      it '優先度が高いタスクが一番上に表示される' do
+        visit tasks_path
+        click_on '優先度'
+        expect(page.text).to match(/#{task1.not_started_yet}[\s\S]*#{task2.not_started_yet}/)
+      end
+    end
   end
 end

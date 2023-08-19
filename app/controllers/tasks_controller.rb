@@ -1,8 +1,13 @@
 class TasksController < ApplicationController
+  #8/18にコードを避難させた
   def index
-    @tasks = Task.all.order(created_at: :desc)
-    if params[:sort_expired].present?
+    @tasks = Task.all.order(created_at: :desc).page(params[:page])
+    if params[:sort_expired].present?#終了期限で並び替える時の処理
       @tasks = Task.sort_expired
+    end
+
+    if params[:sort_priority].present?#優先順位で並び替える時の処理
+      @tasks = Task.sort_priority
     end
 
     if params[:not_started_yet].present? && params[:status].present?
@@ -62,6 +67,6 @@ class TasksController < ApplicationController
   private
 
   def task_params
-    params.require(:task).permit(:not_started_yet, :content, :expired_at, :status)
+    params.require(:task).permit(:not_started_yet, :content, :expired_at, :status, :priority)
   end
 end
