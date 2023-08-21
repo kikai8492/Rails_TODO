@@ -10,6 +10,7 @@ ja:
       task:
         not_started_yet: タスク名
         content: 詳細
+      
   date:
     abbr_day_names:
     - 日

@@ -4,4 +4,9 @@ FactoryBot.define do
     not_started_yet { 'test_title' }
     content { 'test_content' }
   end
+
+  factory :second_task, class: Task do #models/task.rbの検索機能のテストで使用するために作成
+    not_started_yet { 'test_title2' }
+    content { 'test_content2' }
+  end
 end
