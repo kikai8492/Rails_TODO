@@ -14,3 +14,8 @@
                password: password,
                )
 end
+
+User.create!(name:  "kikai",
+  email: "yysskikai04@icloud.com",
+  password:  "aaaaaa",
+  admin: true)

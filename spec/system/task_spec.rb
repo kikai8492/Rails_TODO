@@ -1,7 +1,14 @@
 require 'rails_helper'
 RSpec.describe 'タスク管理機能', type: :system do
-
-  describe '新規作成機能' do
+  # before do
+  #   visit new_user_path
+  #   FactoryBot.create(:user)
+  # end
+  describe '新規作成機能' do 
+    # before do
+    #   visit new_session_path
+    #   FactoryBot.create(:login_user)
+    # end
     context 'タスクを新規作成した場合' do
       it '作成したタスクが表示される' do
         # 1. new_task_pathに遷移する（新規作成ページに遷移する）
@@ -14,6 +21,7 @@ RSpec.describe 'タスク管理機能', type: :system do
         fill_in 'content', with: 'task'
         fill_in 'expired_at', with: '002023-08-18'
         select '着手中', from: 'task_status'
+        select '高', from: 'task_priority'
         #textはタスク名のtext_fieldのid
         # ここに「タスク詳細」というラベル名の入力欄に内容をfill_in（入力）する処理を書く
         # 3. 「登録する」というvalue（表記文字）のあるボタンをクリックする
@@ -26,6 +34,7 @@ RSpec.describe 'タスク管理機能', type: :system do
         expect(page).to have_content 'task'
         expect(page).to have_content '2023-08-18'
         expect(page).to have_content '着手中'
+        expect(page).to have_content '高'
       end
     end
   end

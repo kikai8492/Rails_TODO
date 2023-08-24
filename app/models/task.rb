@@ -1,5 +1,5 @@
 class Task < ApplicationRecord
-  belongs_to :user
+  belongs_to :user, dependent: :destroy
   validates :not_started_yet, presence: true
   validates :content, presence: true
 

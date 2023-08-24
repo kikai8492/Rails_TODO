@@ -1,0 +1,6 @@
+<h1><%= @user.name%>の詳細ページ</h1>
+<p>メールアドレス:<%= @user.email%><p>
+<h3><%= @user.name%>のタスクは以下の通り</h3>
+<% @user.tasks.each_with_index do |task,idx| %>
+  <p><%= idx + 1%>:<%= task.not_started_yet%><p>
+<% end %>
