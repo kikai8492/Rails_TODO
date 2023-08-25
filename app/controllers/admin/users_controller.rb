@@ -1,31 +1,26 @@
 class Admin::UsersController < ApplicationController
   def index
-    # @users = User.all
-    # @users = User.select(:id, :name)
-    @users = User.all.includes(:tasks)
-    #@users = User.preload(:tasks)#本当はincludesを使ってpreloadとeager_loadを自動で使い分ける方がいいがデータ量が多くなるとpreloadの方がパフォーマンスが良いです。
-    # @users = User.eager_load(:tasks
+    @users = User.all.includes(:tasks).order(id: "ASC")
     if current_user.admin == false #usersテーブルのadminカラムがfalseの場合は管理者画面へのアクセスを禁止してタスク一覧画面にリダイレクトする
       redirect_to tasks_path, notice: "管理者以外はアクセスできません"
     end
-    
   end
 
-  # def new
-  #   @user = User.new 
-  #   if current_user.admin == false
-  #     redirect_to tasks_path, notice: "管理者以外はアクセスできません"
-  #   end
-  # end
+  def new
+    @user = User.new 
+    if current_user.admin == false
+      redirect_to tasks_path, notice: "管理者以外はアクセスできません"
+    end
+  end
 
-  # def create
-  #   @user = User.new(user_params)
-  #   if @user.save
-  #     redirect_to admin_users_path, notice: "管理者ユーザー登録が完了しました！"
-  #   else
-  #     render :new, notice: "管理者ユーザー登録に失敗しました"
-  #   end
-  # end
+  def create
+    @user = User.new(user_params)
+    if @user.save
+      redirect_to admin_users_path, notice: "管理者がユーザーを登録しました！"
+    else
+      render :new, notice: "管理者ユーザー登録に失敗しました"
+    end
+  end
 
   def edit
     @user = User.find(params[:id])
@@ -62,6 +57,6 @@ class Admin::UsersController < ApplicationController
   private
 
   def user_params
-    require(:user).permit(:name, :email, :password, :password_confirmation)
+    params.require(:user).permit(:name, :email, :password, :password_confirmation)
   end
 end
