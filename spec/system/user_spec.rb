@@ -158,11 +158,9 @@ RSpec.describe 'ユーザー機能', type: :system do
         fill_in 'session_password', with: admin_user.password
         click_on 'ログインする'
         
-      
         visit admin_users_path
         click_on 'test1の編集'
         
-
         edit_user = User.find_by(email: user.email)
         visit edit_admin_user_path(id: edit_user.id)
         fill_in 'user_name', with: 'test3'
@@ -171,9 +169,26 @@ RSpec.describe 'ユーザー機能', type: :system do
         fill_in 'user_password_confirmation', with: 'aaaaaa'
         
         click_on 'アカウントを作成する'
-        # find('input[name="commit"]').click
         visit admin_users_path
         expect(page).to have_content 'test3'
+      end
+      it '管理ユーザはユーザの削除をできること' do
+        visit new_user_path
+        fill_in 'user_name', with: admin_user.name
+        fill_in 'user_email', with: admin_user.email
+        fill_in 'user_password', with: admin_user.password
+        fill_in 'user_password_confirmation', with: admin_user.password
+        click_on 'アカウントを作成する'
+        visit new_session_path
+        fill_in 'session_email', with: admin_user.email
+        fill_in 'session_password', with: admin_user.password
+        click_on 'ログインする'
+        
+        visit admin_users_path
+        click_on 'test2の削除'
+        page.driver.browser.switch_to.alert.accept #これを記載することで確認ダイアログのOKを押すことができる
+        
+        expect(page).not_to have_content 'test2'
       end
     end
   end

@@ -12,14 +12,15 @@
       <td><%= user.name %></td>
       <td><%= user.tasks.size%><td> <%#本当はcountを使いたかったが、それだとせっかくincludesをつけてもをつけてもn + 1問題は解決せずに、クエリが大量に発行される%>
         <%# <%= link_to, '詳細', admin_user_path(user.id) %> 
-        <%= link_to admin_user_path(user.id) do %> <%#=ただの詳細だとテストの時に二つ詳細があるからクリックできませんときたので〜の詳細とすることでテストを通過できるようにした%>
+        <%= link_to admin_user_path(user.id) do %> <%#=ただの詳細というリンク名だとテストの時に二つ詳細があるからクリックできませんときたので〜の詳細とすることでテストを通過できるようにした%>
           <%= user.name %>の詳細
         <% end %>
-        <%# <%= link_to '編集', edit_admin_user_path(user.id) %> 
-        <%= link_to edit_admin_user_path(user.id) do %> <%#=ただの詳細だとテストの時に二つ詳細があるからクリックできませんときたので〜の詳細とすることでテストを通過できるようにした%>
+        <%= link_to edit_admin_user_path(user.id) do %> <%#=ただの編集という名前だとテストの時に二つ編集があるからクリックできませんときたので〜の詳細とすることでテストを通過できるようにした%>
           <%= user.name %>の編集
         <% end %>
-        <%= link_to '削除', admin_user_path(user.id), method: :delete, data: { confirm: '削除しますか？' } %>
+        <%= link_to admin_user_path(user.id), method: :delete, data: { confirm: '削除しますか？' } do %><%#=ただの削除という名前だとテストの時に二つ削除があるからクリックできませんときたので〜の詳細とすることでテストを通過できるようにした%>
+          <%= user.name %>の削除
+        <% end %>
       </td>
     </tr>
   <% end %>
