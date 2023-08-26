@@ -186,8 +186,7 @@ RSpec.describe 'ユーザー機能', type: :system do
         
         visit admin_users_path
         click_on 'test2の削除'
-        page.driver.browser.switch_to.alert.accept #これを記載することで確認ダイアログのOKを押すことができる
-        
+        page.driver.browser.switch_to.alert.accept #これを記載することで確認ダイアログのOKを押すことができる　参考にしたサイトhttps://study-output.hatenadiary.com/entry/2021/04/26/011540
         expect(page).not_to have_content 'test2'
       end
     end
