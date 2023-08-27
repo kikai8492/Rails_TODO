@@ -1,5 +1,4 @@
 <h1 class="title">To-Doリスト</h1>
-<h2><%= current_user.name%>のページ</h2>
 <%= link_to 'タスクを追加する', new_task_path, class:"btn btn-primary"%>
 <table class="table">
   <tr>
@@ -9,6 +8,7 @@
     <th>登録日時</th>
     <th>ステータス</th>
     <th><%= link_to "優先度", tasks_path(sort_priority: "true") %></th>
+    <th>ユーザ名</th>
   </tr>
   <tr>
     <td>      
@@ -20,6 +20,7 @@
             <td><%= t.created_at.strftime('%Y/%m/%d')%></td>
             <td><%= t.status%></td>
             <td><%= t.priority%></td>
+            <td><%= current_user.name%></td>
             <td>
               <%= link_to '詳細', task_path(t.id) %>
               <%= link_to '編集', edit_task_path(t.id) %>
@@ -27,6 +28,7 @@
             </td>
           </tr>
       <% end %>
+      
     </td>
     <td>
 

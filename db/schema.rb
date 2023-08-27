@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_08_26_141802) do
+ActiveRecord::Schema.define(version: 2023_08_27_010001) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 2023_08_26_141802) do
     t.integer "user_id"
     t.date "expired_at", default: -> { "CURRENT_DATE" }, null: false
     t.string "status", default: "未着手", null: false
+    t.integer "priority", default: 0, null: false
   end
 
   create_table "users", force: :cascade do |t|
