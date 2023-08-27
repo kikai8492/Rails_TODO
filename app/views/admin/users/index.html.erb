@@ -5,12 +5,15 @@
       <th>ユーザーid</th>
       <th>ユーザー名</th>
       <th>タスク数</th>
+      <th>管理者権限</th>
     </tr>
   <% @users.each do |user|%>
     <tr>
       <td><%= user.id %></td>
       <td><%= user.name %></td>
-      <td><%= user.tasks.size%><td> <%#本当はcountを使いたかったが、それだとせっかくincludesをつけてもをつけてもn + 1問題は解決せずに、クエリが大量に発行される%>
+      <td><%= user.tasks.size%></td>
+      <td><%= user.admin %></td>
+      <td> <%#本当はcountを使いたかったが、それだとせっかくincludesをつけてもをつけてもn + 1問題は解決せずに、クエリが大量に発行される%>
         <%# <%= link_to, '詳細', admin_user_path(user.id) %> 
         <%= link_to admin_user_path(user.id) do %> <%#=ただの詳細というリンク名だとテストの時に二つ詳細があるからクリックできませんときたので〜の詳細とすることでテストを通過できるようにした%>
           <%= user.name %>の詳細
