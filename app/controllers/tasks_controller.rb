@@ -1,16 +1,19 @@
 class TasksController < ApplicationController
-  #8/18にコードを避難させた
   def index
-    @tasks = Task.all.order(created_at: :desc).page(params[:page])
+    # @tasks = Task.all.order(created_at: :desc).page(params[:page])
+    @tasks = current_user.tasks.order(created_at: :desc).page(params[:page])
     if params[:sort_expired].present?#終了期限で並び替える時の処理
-      @tasks = Task.sort_expired.page(params[:page])
+      # @tasks = Task.sort_expired.page(params[:page])
+      @tasks = current_user.tasks.sort_expired.page(params[:page])
     end
 
     if params[:sort_priority].present?#優先順位で並び替える時の処理
-      @tasks = Task.sort_priority.page(params[:page])
+      # @tasks = Task.sort_priority.page(params[:page])
+      @tasks = current_user.tasks.sort_priority.page(params[:page])
     end
 
     if params[:not_started_yet].present? && params[:status].present?
+      # @tasks = Task.not_started_yet_and_status(params[:not_started_yet], params[:status]).page(params[:page])
       @tasks = Task.not_started_yet_and_status(params[:not_started_yet], params[:status]).page(params[:page])
     elsif params[:not_started_yet].present?
       @tasks = Task.not_started_yet(params[:not_started_yet]).page(params[:page])
@@ -27,7 +30,8 @@ class TasksController < ApplicationController
   end
 
   def create 
-    @task = Task.new(task_params)
+    @task = current_user.tasks.build(task_params) #アソシエーションの時はbuildを使う
+
     if @task.save
       redirect_to tasks_path, notice: "タスクを作成しました！"
     else
@@ -37,6 +41,9 @@ class TasksController < ApplicationController
 
   def edit
     @task = Task.find(params[:id])
+    if @task.user_id != current_user.id
+      redirect_to tasks_path, notice: "他人のタスクは編集できません"
+    end
   end
 
 
@@ -51,6 +58,9 @@ class TasksController < ApplicationController
 
   def show
     @task = Task.find(params[:id])
+    if @task.user_id != current_user.id
+      redirect_to tasks_path, notice: "他人のタスクは閲覧できません"
+    end
   end
 
 

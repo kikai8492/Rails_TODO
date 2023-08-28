@@ -1,4 +1,5 @@
 class Task < ApplicationRecord
+  belongs_to :user
   validates :not_started_yet, presence: true
   validates :content, presence: true
 

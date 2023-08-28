@@ -1,7 +1,20 @@
 require 'rails_helper'
 RSpec.describe 'タスク管理機能', type: :system do
-
-  describe '新規作成機能' do
+  
+  describe '新規作成機能' do 
+    let!(:user) { FactoryBot.create(:user) }
+    before do
+      visit new_user_path
+      fill_in 'user_name', with: user.name
+      fill_in 'user_email', with: user.email
+      fill_in 'user_password', with: user.password
+      fill_in 'user_password_confirmation', with: user.password
+      click_on 'アカウントを作成する'
+      visit new_session_path
+      fill_in 'session_email', with: user.email
+      fill_in 'session_password', with: user.password
+      click_on 'ログインする'
+    end
     context 'タスクを新規作成した場合' do
       it '作成したタスクが表示される' do
         # 1. new_task_pathに遷移する（新規作成ページに遷移する）
@@ -14,6 +27,7 @@ RSpec.describe 'タスク管理機能', type: :system do
         fill_in 'content', with: 'task'
         fill_in 'expired_at', with: '002023-08-18'
         select '着手中', from: 'task_status'
+        select '高', from: 'task_priority'
         #textはタスク名のtext_fieldのid
         # ここに「タスク詳細」というラベル名の入力欄に内容をfill_in（入力）する処理を書く
         # 3. 「登録する」というvalue（表記文字）のあるボタンをクリックする
@@ -26,95 +40,128 @@ RSpec.describe 'タスク管理機能', type: :system do
         expect(page).to have_content 'task'
         expect(page).to have_content '2023-08-18'
         expect(page).to have_content '着手中'
+        expect(page).to have_content '高'
       end
     end
   end
 
   describe '一覧表示機能' do
+    let!(:user) { FactoryBot.create(:user) }
+    before do
+      visit new_user_path
+      fill_in 'user_name', with: user.name
+      fill_in 'user_email', with: user.email
+      fill_in 'user_password', with: user.password
+      fill_in 'user_password_confirmation', with: user.password
+      click_on 'アカウントを作成する'
+      visit new_session_path
+      fill_in 'session_email', with: user.email
+      fill_in 'session_password', with: user.password
+      click_on 'ログインする'
+    end
     context '一覧画面に遷移した場合' do
       it '作成済みのタスク一覧が表示される' do
         # テストで使用するためのタスクを作成
-        FactoryBot.create(:task, not_started_yet: 'task1', expired_at: '002023-08-18')
-        FactoryBot.create(:task, not_started_yet: 'task2', expired_at: '002023-08-19')
+        # FactoryBot.create(:task, not_started_yet: 'task1', content: 'test1',expired_at: '002023-08-18')
+        # FactoryBot.create(:task, not_started_yet: 'task2', content: 'test2',expired_at: '002023-08-19')
+        visit new_task_path
+        fill_in 'text', with: 'task'
+        fill_in 'content', with: 'task'
+        fill_in 'expired_at', with: '002023-08-18'
+        select '着手中', from: 'task_status'
+        select '高', from: 'task_priority'
+        click_on 'タスクを追加する'
         # タスク一覧ページに遷移
         visit tasks_path
         # visitした（遷移した）page（タスク一覧ページ）に「task」という文字列が
         # have_contentされているか（含まれているか）ということをexpectする（確認・期待する）
-        expect(page).to have_content 'task1'
-        expect(page).to have_content 'task2'
+        expect(page).to have_content 'task'
         # expectの結果が true ならテスト成功、false なら失敗として結果が出力される
       end
     end
   end
 
   describe '検索機能' do
+    let!(:user) { FactoryBot.create(:user) }
+    let!(:task) { FactoryBot.create(:task, user: user) }
+    let!(:second_task) { FactoryBot.create(:second_task, user: user) }
+    before do
+      visit new_user_path
+      fill_in 'user_name', with: user.name
+      fill_in 'user_email', with: user.email
+      fill_in 'user_password', with: user.password
+      fill_in 'user_password_confirmation', with: user.password
+      click_on 'アカウントを作成する'
+      visit new_session_path
+      fill_in 'session_email', with: user.email
+      fill_in 'session_password', with: user.password
+      click_on 'ログインする'
+    end
     context 'タイトルであいまい検索をした場合' do
       it '検索キーワードを含むタスクで絞り込める' do
-        # テストで使用するためのタスクを作成
-        FactoryBot.create(:task, not_started_yet: 'task1', expired_at: '002023-08-18')
-        FactoryBot.create(:task, not_started_yet: 'hogehoge', expired_at: '002023-08-19')
-        FactoryBot.create(:task, not_started_yet: 'fugafuga', expired_at: '002023-08-20')
-        # タスク一覧ページに遷移
         visit tasks_path
-        fill_in 'search', with: 'h'
+        fill_in 'search', with: '2'
         click_on '検索'
-        expect(page).to have_content 'hogehoge'
-        expect(page).not_to have_content 'task1'
-        expect(page).not_to have_content 'fugafuga'
+        expect(page).to have_content 'test_title2'
+        expect(page).not_to have_content 'test_title1'
       end
+
       it 'ステータス検索ができる' do
-        FactoryBot.create(:task, not_started_yet: 'task1', expired_at: '002023-08-18', status: '着手中')
-        FactoryBot.create(:task, not_started_yet: 'hogehoge', expired_at: '002023-08-19', status: '未着手')
-        FactoryBot.create(:task, not_started_yet: 'fugafuga', expired_at: '002023-08-20', status: '完了')
         visit tasks_path
         select '着手中', from: 'status'
         click_on '検索'
-        expect(page).to have_content 'task1'
+        expect(page).to have_content 'test_title1'
       end
       it 'タイトルとステータスの両方で検索ができる' do
-        FactoryBot.create(:task, not_started_yet: 'task1', expired_at: '002023-08-18', status: '着手中')
-        FactoryBot.create(:task, not_started_yet: 'task2', expired_at: '002023-08-19', status: '未着手')
-        FactoryBot.create(:task, not_started_yet: 'task3', expired_at: '002023-08-20', status: '完了')
+        
         visit tasks_path
         fill_in 'search', with: 't'
         select '着手中', from: 'status'
-        expect(page).to have_content 'task1'
+        expect(page).to have_content 'test_title1'
       end
     end
   end
 
   describe '詳細表示機能' do
+    let!(:user) { FactoryBot.create(:user) }
+    let!(:task) { FactoryBot.create(:task, user: user) }
+    let!(:second_task) { FactoryBot.create(:second_task, user: user) }
+    before do
+      visit new_user_path
+      fill_in 'user_name', with: user.name
+      fill_in 'user_email', with: user.email
+      fill_in 'user_password', with: user.password
+      fill_in 'user_password_confirmation', with: user.password
+      click_on 'アカウントを作成する'
+      visit new_session_path
+      fill_in 'session_email', with: user.email
+      fill_in 'session_password', with: user.password
+      click_on 'ログインする'
+    end
     context '任意のタスク詳細画面に遷移した場合' do
       it '該当タスクの内容が表示される' do
-        task = FactoryBot.create(:task, not_started_yet: 'task')
         visit task_path(task)
-        expect(page).to have_content 'task'
+        expect(page).to have_content 'test_title1'
       end
     end
     context 'タスクが作成日時の降順に並んでいる場合' do
-      let!(:task1) { Task.create(not_started_yet: "task1", content: "content1", expired_at: '002023-08-18') }
-      let!(:task2) { Task.create(not_started_yet: "task2", content: "content2", expired_at: '002023-08-19') }
       it '新しいタスクが一番上に表示される' do
         visit tasks_path
-        expect(page.text).to match(/#{task2.not_started_yet}[\s\S]*#{task1.not_started_yet}/)
+        expect(page.text).to match(/#{second_task.not_started_yet}[\s\S]*#{task.not_started_yet}/)
       end
     end
     context '終了期限でソートするを押した場合' do
-      let!(:task1) { Task.create(not_started_yet: "task1", content: "content1", expired_at: '002023-08-19') }
-      let!(:task2) { Task.create(not_started_yet: "task2", content: "content2", expired_at: '002023-08-18') }
       it '終了期限が一番近いタスクが一番上に表示される' do
         visit tasks_path
         click_on '終了期限'
-        expect(page.text).to match(/#{task2.not_started_yet}[\s\S]*#{task1.not_started_yet}/)
+        expect(page.text).to match(/#{task.not_started_yet}[\s\S]*#{second_task.not_started_yet}/)
       end
     end
     context '優先度でソートするを押した場合' do
-      let!(:task1) { Task.create(not_started_yet: "task1", content: "content1", expired_at: '002023-08-19', priority: '高') }
-      let!(:task2) { Task.create(not_started_yet: "task2", content: "content2", expired_at: '002023-08-18', priority: '低') }
       it '優先度が高いタスクが一番上に表示される' do
         visit tasks_path
         click_on '優先度'
-        expect(page.text).to match(/#{task1.not_started_yet}[\s\S]*#{task2.not_started_yet}/)
+        expect(page.text).to match(/#{task.not_started_yet}[\s\S]*#{second_task.not_started_yet}/)
       end
     end
   end

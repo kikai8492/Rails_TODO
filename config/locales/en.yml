@@ -29,5 +29,22 @@
 # To learn more, please read the Rails Internationalization guide
 # available at https://guides.rubyonrails.org/i18n.html.
 
-en:
+# en:
+#   hello: "Hello world"
+#   faker:
+#   name:
+#     first_name: "First Name"
+#     last_name: "Last Name"
+
+  en:
   hello: "Hello world"
+  faker:
+    name:
+      first_name: "First Name"
+    games:
+      pokemon:
+        names: # Add this section
+          - "Pokémon Game 1"
+          - "Pokémon Game 2"
+          - "Pokémon Game 3"
+          # Add more Pokémon game names as needed
