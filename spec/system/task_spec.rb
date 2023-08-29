@@ -85,6 +85,9 @@ RSpec.describe 'タスク管理機能', type: :system do
     let!(:user) { FactoryBot.create(:user) }
     let!(:task) { FactoryBot.create(:task, user: user) }
     let!(:second_task) { FactoryBot.create(:second_task, user: user) }
+    let!(:tag) { FactoryBot.create(:tag) }
+    let!(:tag2) { FactoryBot.create(:tag2) }
+    let!(:tag3) { FactoryBot.create(:tag3) }
     before do
       visit new_user_path
       fill_in 'user_name', with: user.name
@@ -105,7 +108,6 @@ RSpec.describe 'タスク管理機能', type: :system do
         expect(page).to have_content 'test_title2'
         expect(page).not_to have_content 'test_title1'
       end
-
       it 'ステータス検索ができる' do
         visit tasks_path
         select '着手中', from: 'status'
@@ -113,11 +115,31 @@ RSpec.describe 'タスク管理機能', type: :system do
         expect(page).to have_content 'test_title1'
       end
       it 'タイトルとステータスの両方で検索ができる' do
-        
         visit tasks_path
         fill_in 'search', with: 't'
         select '着手中', from: 'status'
         expect(page).to have_content 'test_title1'
+      end
+      it 'タグで検索した場合' do
+        visit new_task_path
+        fill_in 'text', with: "test_title3"
+        fill_in 'content', with: "test_content3"
+        check 'tag1'
+        click_on 'タスクを追加する'
+        select 'tag1', from: 'tag_id'
+        click_on '検索'
+        expect(page).to have_content 'test_title3'
+        expect(page).not_to have_content 'test_title1'
+      end
+      it '詳細画面にタグが表示されていること' do
+        visit new_task_path
+        fill_in 'text', with: "test_title3"
+        fill_in 'content', with: "test_content3"
+        check 'tag1'
+        binding.pry
+        click_on 'タスクを追加する'
+        click_on 'test_title3の詳細'
+        expect(page).to have_content 'tag1'
       end
     end
   end

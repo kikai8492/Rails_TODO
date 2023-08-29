@@ -5,11 +5,13 @@ class TasksController < ApplicationController
     if params[:sort_expired].present?#終了期限で並び替える時の処理
       # @tasks = Task.sort_expired.page(params[:page])
       @tasks = current_user.tasks.sort_expired
+      # @tasks = @tasks.sort_expired
     end
 
     if params[:sort_priority].present?#優先順位で並び替える時の処理
       # @tasks = Task.sort_priority.page(params[:page])
       @tasks = current_user.tasks.sort_priority
+      # @tasks = @tasks.sort_priority
     end
 
     # タスクのタイトルで検索するなら
@@ -27,15 +29,13 @@ class TasksController < ApplicationController
       @tasks = @tasks.priority(params[:priority])
     end
 
-    # タグで検索するなら
-    # if params[:title].present?
-    #   @tasks = @tasks.title(params[:title])
-    # end
-    if params[:title].present?
-      @tasks = Tagging.where(tag_id: params[:title_id]).pluck(:task_id)
+    if params[:tag_id].present? #index.html.erbの41行目のtag_idの値を取得している
+      task_id = Tagging.where(tag_id: params[:tag_id]).pluck(:task_id) #タグのidを元にタスクのidを取得している
+      @tasks = @tasks.where(id:task_id) #タスクのidを元にタスクを取得している
     end
 
-    @tasks = @tasks.page(params[:page])
+    # @tasks = @tasks.page(params[:page])
+    @tasks = Kaminari.paginate_array(@tasks).page(params[:page]).per(10)
 
 
     # if params[:not_started_yet].present? && params[:status].present? && params[:title].present? #タイトルとステータスとタグで検索する時の処理
