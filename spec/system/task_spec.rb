@@ -136,7 +136,6 @@ RSpec.describe 'タスク管理機能', type: :system do
         fill_in 'text', with: "test_title3"
         fill_in 'content', with: "test_content3"
         check 'tag1'
-        binding.pry
         click_on 'タスクを追加する'
         click_on 'test_title3の詳細'
         expect(page).to have_content 'tag1'
