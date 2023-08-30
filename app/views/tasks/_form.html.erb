@@ -19,5 +19,14 @@
   <%= f.label "優先度"%>
   <%= f.select :priority, Task.priorities.keys.map { |f| [t("enum.task.priority.#{f}"), f] }, { include_blank: "選択してください" } %>
 
+  <%= f.collection_check_boxes(:tag_ids, Tag.all, :id, :title) do |tag| %>
+    <div class='form-check'>
+        <%= tag.label class: 'form-check-label' do %>
+          <%= tag.check_box class: 'form-check-input' %>
+          <%= tag.text %>
+        <% end %>
+    </div>
+  <% end %>
+
   <%= f.submit "タスクを追加する"%>
 <% end %>

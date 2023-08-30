@@ -3,6 +3,9 @@
   <p class="content"><%= @task.not_started_yet%></p>
   <h2>詳細</h2>
   <p class="content"><%= @task.content%><p>
-
+  <h2>タグ</h2>
+  <% @task.tags.each do |tag|%>
+    <%=tag.title%>
+  <%end%>
   <%= link_to "戻る", tasks_path %>
 </div>

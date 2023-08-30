@@ -15,7 +15,28 @@
                )
 end
 
-User.create!(name:  "kikai",
-  email: "yysskikai04@icloud.com",
-  password:  "aaaaaa",
-  admin: true)
+# 10.times do |n|
+#   User.create!(name: "kikai#{n+1}",
+#     email: "yysskikai#{n + 1}@icloud.com",
+#     password:  "aaaaaa",
+#     admin: false)
+# end
+# Task.create!([
+#   { not_started_yet: 'タスク1', content: 'タスク1の内容', expired_at: '2021-08-28', status: '未着手', priority: '低', user_id: 1 }
+# ])
+
+User.all.each do |user|
+  user.tasks.create!([
+    not_started_yet: 'タスク1', 
+    content: 'タスク1の内容', 
+    expired_at: '2021-08-28', 
+    status: '未着手', 
+    priority: '低'
+  ])
+end
+
+10.times do |n|
+  Tag.create!([
+    { title: "タグ#{n + 1}" }
+  ])
+end

@@ -7,6 +7,8 @@ FactoryBot.define do
     priority { '高' }
     status { '着手中' }
 
+    # association :tag
+    # title { 'tag1' }
   end
 
   factory :second_task, class: Task do #models/task.rbの検索機能のテストで使用するために作成
@@ -15,5 +17,8 @@ FactoryBot.define do
     expired_at { '002021-08-19' }
     priority { '中' }
     status { '未着手' }
+
+    # association :tag
+    # title { 'tag2' }
   end
 end
