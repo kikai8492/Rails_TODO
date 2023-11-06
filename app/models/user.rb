@@ -10,7 +10,7 @@ class User < ApplicationRecord
 
   def must_not_destroy_last_one_admin
     if User.where(admin: true).count <= 1 && self.admin   #self.adminは削除しようとしているユーザーが管理者かどうかを判定する
-      throw(:abort) #throw(:abort)は処理をしないという
+      throw(:abort) #throw(:abort)は処理をしないという意味
     end
   end
 end
